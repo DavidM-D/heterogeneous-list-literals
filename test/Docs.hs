@@ -1,45 +1,26 @@
 {-# Language TypeApplications, DataKinds, TypeInType, KindSignatures #-}
 
-import Data.IndexedListLiterals
+import Data.HeterogeneousListLiterals
 import GHC.TypeLits
 import Data.Kind
+import Data.Dynamic
 
-data Matrix (x :: Nat) (y :: Nat) (ty :: Type)
+data HList (a :: [Type]) = HList [Dynamic]
 
-data Vector (length :: Nat) (ty :: Type)
+hList :: HLL input output => input -> HList output
+hList = HList . toDynamicList
 
-vector :: ILL input length output => input -> Vector length output
-vector = undefined
+a :: HList '[]
+a = hList ()
 
-v :: Vector 3 Int
-v = vector (1,2,3)
+b :: HList '[Bool]
+b = hList (OneTuple True)
 
-x :: Vector 0 Double
-x = vector $ ZeroTuple @Double
-
-y :: Vector 1 Double
-y = vector (OneTuple 1)
-
-z :: Vector 2 String
-z = vector ("Hello", "World")
-
-matrix :: (ILL row width ty, ILL matrix height row) => matrix -> Matrix height width ty
-matrix = undefined
-
-a :: Matrix 0 0 Bool
-a = matrix $ ZeroTuple @(ZeroTuple Bool)
-
-b :: Matrix 1 2 String
-b = matrix $ OneTuple ("Hello","World")
-
-c :: Matrix 4 5 Double
-c = matrix ((1,2,3,0,0)
-           ,(4,5,6,0,0)
-           ,(7,8,9,0,0)
-           ,(0,0,0,0,0))
+c :: HList '[Bool, Int, Double, String]
+c = hList (True, 24, 10.5, "Fire")
 
 -- | just making sure the docs type check
 main :: IO ()
 main = do
-  _ <- return (a,b,c,v,x,y,z)
+  _ <- return (a,b,c)
   return ()
