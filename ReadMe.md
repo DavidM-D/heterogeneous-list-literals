@@ -12,7 +12,7 @@ a :: HList '[]
 a = hList ()
 
 b :: HList '[Bool]
-b = hList (OneTuple True)
+b = hList (Only True)
 
 c :: HList '[Bool, Int, Double, String]
 c = hList (True, 24, 10.5, "Fire")

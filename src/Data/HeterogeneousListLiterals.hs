@@ -9,12 +9,12 @@
 module Data.HeterogeneousListLiterals (
     HeterogeneousListLiteral(..)
   , HLL
-  , module Data.Tuple.OneTuple
+  , module Data.Tuple.Only
   ) where
 
 import GHC.TypeLits
 import Data.Kind
-import Data.Tuple.OneTuple
+import Data.Tuple.Only
 import Control.Monad
 import Data.Dynamic
 import Data.Tuple
@@ -30,8 +30,8 @@ class HeterogeneousListLiteral (input :: Type) (output :: [Type]) | input -> out
 instance HeterogeneousListLiteral () '[] where
   toDynamicList () = []
 
-instance Typeable a1 => HeterogeneousListLiteral (OneTuple a1) '[a1] where
-  toDynamicList (OneTuple a1) = [toDyn a1]
+instance Typeable a1 => HeterogeneousListLiteral (Only a1) '[a1] where
+  toDynamicList (Only a1) = [toDyn a1]
 
 -- all code generated below comes from this function
 -- generate :: Int -- ^ up to N
